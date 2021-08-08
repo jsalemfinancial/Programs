@@ -6,55 +6,52 @@ from ibapi.scanner import ScannerSubscription
 import time
 import queue
 import threading
-import pandas
+import pandas as pd 
+import datetime
+import collections
 
 q = queue.Queue()
-mQ = queue.Queue()
+queryTime = (datetime.datetime.today() - datetime.timedelta(days=180)).strftime("%Y%m%d %H:%M:%S")
 
 class Screener(EWrapper, EClient):
-    Qing = False
-    barData = []
-    listT = []
-    listE = []
-    listS = []
-    listP = []
+    data = collections.defaultdict(list)
 
     def __init__(self):
         EWrapper.__init__(self)
         EClient.__init__(self, self)
+
+        self.connect("127.0.0.1", 7497, 333)
+        self.reqMarketDataType(3)
     def connect(self, host, port, clientId):
         super().connect(host, port, clientId)
-        time.sleep(1)
+
         if self.isConnected() == True:
-            print("Conected!")
-            self.reqMarketDataType(1)
+            print("Connected!")
         else:
             print("Not Connected!")
-        return 
+
     def error(self, reqId, errorCode, errorString):
         if reqId == -1:
             return
         else:
             print("Error: ", reqId, " ", errorCode, " ", errorString)
-    def mainQueue(self, reqId):
-        mQ.put(reqId)
 
-        while True:
-            if self.Qing == True:
-                time.sleep(1)
-            else:
-                mQ.task_done()
-                return
     def historicalData(self, reqId, bar):
-        return super().historicalData(reqId, bar)
+        super().historicalData(reqId, bar)
+        self.data["open"].append(bar.open)
+        self.data["high"].append(bar.high)
+        self.data["low"].append(bar.low)
+        self.data["close"].append(bar.close)
+
     def historicalDataEnd(self, reqId, start, end):
-        return super().historicalDataEnd(reqId, start, end)
-    def reqScannerSubscription(self, reqId, subscription, scannerSubscriptionOptions, scannerSubscriptionFilterOptions):
-        return super().reqScannerSubscription(reqId, subscription, scannerSubscriptionOptions, scannerSubscriptionFilterOptions)
-    def scannerData(self, reqId, rank, contractDetails, distance, benchmark, projection, legsStr):
-        return super().scannerData(reqId, rank, contractDetails, distance, benchmark, projection, legsStr)
-    def scannerDataEnd(self, reqId):
-        return super().scannerDataEnd(reqId)
+        print("Done printing data!")
+        df = pd.DataFrame.from_dict(self.data)
+        print(df)
+        df.to_csv("C:\\Users\\josep\\Documents\\GitHub\\Programs\\data.csv", index=False)
+        time.sleep(5)
+        q.task_done()
+        print("Done writing to cvs, Id: ", reqId)
+        
     def write(self):
         with open("List.txt", "w") as f:
             print("Wrote!")
