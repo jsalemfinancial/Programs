@@ -6,9 +6,12 @@ from ibapi.scanner import ScannerSubscription
 import time
 import queue
 import threading
-import pandas as pd 
+import pandas as pd
 import datetime
 import collections
+import os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 q = queue.Queue()
 queryTime = (datetime.datetime.today() - datetime.timedelta(days=180)).strftime("%Y%m%d %H:%M:%S")
@@ -35,9 +38,16 @@ class Screener(EWrapper, EClient):
             return
         else:
             print("Error: ", reqId, " ", errorCode, " ", errorString)
-
+    
+    def reqMktData(self, reqId, contract, genericTickList, snapshot, regulatorySnapshot, mktDataOptions):
+        print(contract)
+        return super().reqMktData(reqId, contract, genericTickList, snapshot, regulatorySnapshot, mktDataOptions)
+    
+    def tickSize(self, reqId, tickType, size):
+            print(size)
+    
     def historicalData(self, reqId, bar):
-        super().historicalData(reqId, bar)
+        #super().historicalData(reqId, bar)
         self.data["open"].append(bar.open)
         self.data["high"].append(bar.high)
         self.data["low"].append(bar.low)
@@ -47,7 +57,7 @@ class Screener(EWrapper, EClient):
         print("Done printing data!")
         df = pd.DataFrame.from_dict(self.data)
         print(df)
-        df.to_csv("C:\\Users\\josep\\Documents\\GitHub\\Programs\\data.csv", index=False)
+        df.to_csv(dir_path+"\\data.csv", index=True)
         time.sleep(5)
         q.task_done()
         print("Done writing to cvs, Id: ", reqId)
