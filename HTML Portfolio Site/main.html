@@ -4,39 +4,34 @@
 <title>Portfolio Site</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    @font-face {
-        font-family: "Noto Sans";
-        src: url(fonts/NotoSans-Regular.ttf) format("truetype");
-    }
-    body {
-        font-family: "Noto Sans";
-    }
-    .header {
-        padding: 80px; 
-        text-align: center;
-        background: #1742a0;
-        color: white;
-    }
-    .navbar {
-        padding: 10%;
-        text-align: center;
-        color: rgb(181, 206, 70);
-    }
-</style>
 </head>
-
+<link rel="stylesheet" href="css/styles.css">
 <body>
-    <div class = "header">
-        <h1>My Website</h1>
-        <div class= "navbar">
-            <a href="#">About</a>
-            <a href="#">Work Experience</a>
-            <a href="#">Projects</a>
-            <a href="#" class="right">Interest</a>
-          </div>
+    <script src="js/jquery-3.6.0.js"></script>
+    <header class = "topHeader">
+        <div id="headerDecor">
+            <h1>Joseph Salem</h1>
+            <div class= "navbar">
+                <a href="https://www.cnn.com/business/markets/premarkets" style="padding-right: 2%; padding-left: 2%" id="navbarHover"> About</a>
+                <a href="https://www.cnn.com/business/markets/premarkets" style="padding-right: 2%; padding-left: 2%" id="navbarHover"> Work Experience</a>
+                <a href="https://www.cnn.com/business/markets/premarkets" style="padding-right: 2%; padding-left: 2%" id="navbarHover"> Projects</a>
+                <a href="https://www.cnn.com/business/markets/premarkets" style="padding-right: 2%; padding-left: 2%" id="navbarHover"> Interests</a>
+            </div>
+        </div>
+    </header>
+
+    <div style="display: flex; flex-direction: row; flex: 1 0 auto; overflow: auto;">
+        <div style="background-color: lightcoral; overflow: auto; flex: 1 1 15%; overflow: auto;">
+            <p>A website created by me. Using Noto Sans</p>
+        </div>
+
+        <div style="background-color: rgb(168, 243, 46); overflow: auto; flex: 1 1 15%; overflow: auto;">
+            <p>More stuff here!</p>
+        </div>
     </div>
-    
-    <p>A website created by me. Using Noto Sans</p>
+
+    <footer style="background-color: rgb(255, 255, 255); text-align: center; flex: 0 1 1%; margin-top: auto;">
+        <p>Footer!</p>
+    </footer>
 </body>
 </html>
