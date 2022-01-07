@@ -8,44 +8,98 @@
     font-weight: bold; 
     src: url(../fonts/NotoSans-Bold.ttf) format("truetype");
 }
+p::-webkit-scrollbar-corner, p::-webkit-scrollbar-button:decrement, p::-webkit-scrollbar-button:increment {
+  width: 0;
+  height: 0;
+}
+p::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+}
+p::-webkit-scrollbar{
+    width: 1vw;
+}
+p::-webkit-track {
+    background: transparent;
+} 
+p::-webkit-scrollbar-thumb {
+    background-color: #4F9D69;
+    border-radius: 5vw;
+    -webkit-border-radius: 5vw;
+}
 body {
     font-family: "Noto Sans";
     margin: 0;
     min-height: 100vh;
-
+    height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hide;
+}
+div {
+    margin: 0;
+}
+p {
+    margin: 2vw 0 1vw 1vw;
+    padding: 0vw 1vw 0vw 1vw;
+    overflow-x: hidden;
+    word-break: break-all;
+    white-space: normal;
+    justify-content: left;
+
+    scrollbar-width: 1vw;
+    scrollbar-color: #4F9D69 transparent;
 }
 a {
     color: inherit;
     text-decoration: inherit;
     position: inherit;
 }
-p {
-    margin-left: 1%;
+br {
+    overflow-x: hide;
 }
-.topHeader {
-    padding: 10% 0% 10% 0%;
+.pageContainer {
+    height: 100vh;
     width: 100%;
-    flex: 0 1 auto;
-    background-image: url("../imgs/monet_japanese_bridge.jpg");
-    background-position: 100%;
-    background-size: 100%;
+    margin: 0;
+    flex: 1 1 90vh;
+    display: flex;
+    flex-direction: row;
+    background-color: #000000;
+    align-items: flex-start;
+    background-image: url(../imgs/polygon-scatter-haikei.svg);
+    background-position: bottom;
+    background-size: cover;
+    overflow: hidden;
 }
 .navbar {
-    color: rgb(24, 12, 77);
-    padding-top: 1%;
-    padding-bottom: 1%;
-    text-align: center;
-}
-#navbarHover:hover {
-    font-family: "Noto Sans Bold";
-}
-#headerDecor {
-    background-color: rgba(233, 211, 179, 0.75);
-    text-align: center;
+    background-color: rgba(244, 165, 96, 0.247);
+    display: flex;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
     width: 100%;
+    flex-direction: column;
     overflow: hidden;
-    border-top: 1vh solid maroon;
-    border-bottom: 1vh solid maroon
+    margin: 0;
+}
+#navbarButton {
+    color: lavender;
+    font-size: 2.5vw;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 3vw;
+    width: 80%;
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    overflow: hidden;
+    margin: 2.5% 0% 5% 0%;
+    padding: 0%;
+}
+#navbarButton:hover {
+    color: #BFFF00;
 }
