@@ -8,6 +8,7 @@
     font-weight: bold; 
     src: url(../fonts/NotoSans-Bold.ttf) format("truetype");
 }
+
 p::-webkit-scrollbar-corner, p::-webkit-scrollbar-button:decrement, p::-webkit-scrollbar-button:increment {
   width: 0;
   height: 0;
@@ -27,6 +28,7 @@ p::-webkit-scrollbar-thumb {
     border-radius: 5vw;
     -webkit-border-radius: 5vw;
 }
+
 body {
     font-family: "Noto Sans";
     margin: 0;
@@ -37,7 +39,7 @@ body {
     overflow-y: scroll;
     overflow-x: hide;
 }
-div {
+div, h1, h2 {
     margin: 0;
 }
 p {
@@ -59,33 +61,17 @@ a {
 br {
     overflow-x: hide;
 }
-.pageContainer {
-    height: 100vh;
-    width: 100%;
-    margin: 0;
-    flex: 1 1 90vh;
-    display: flex;
-    flex-direction: row;
-    background-color: #000000;
-    align-items: flex-start;
-    background-image: url(../imgs/polygon-scatter-haikei.svg);
-    background-position: bottom;
+footer {
+    flex: 1 1 20vh;
+    overflow-y: hidden;
+    background-color: rgb(20, 19, 19);
     background-size: cover;
-    overflow: hidden;
+    color: khaki;
+    text-align: center;
+    margin-top: auto;
+    overflow-x: hide;
 }
-.navbar {
-    background-color: rgba(244, 165, 96, 0.247);
-    display: flex;
-    flex: auto;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    width: 100%;
-    flex-direction: column;
-    overflow: hidden;
-    margin: 0;
-}
-#navbarButton {
+.navbarButton {
     color: lavender;
     font-size: 2.5vw;
     justify-content: center;
@@ -100,6 +86,238 @@ br {
     margin: 2.5% 0% 5% 0%;
     padding: 0%;
 }
-#navbarButton:hover {
+.navbarButton:hover {
     color: #BFFF00;
+}
+.slidesText {
+    background-size: cover;
+    background-color: rgba(137, 43, 226, 0.253);
+    flex: 1 1 94vh;
+    height: 100%;
+    max-height: 94vh;
+    overflow: scroll;
+}
+#pageContainer {
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    flex: 1 1 100vh;
+    display: flex;
+    flex-direction: row;
+    background-color: #000000;
+    align-items: flex-start;
+    background-image: url(../imgs/polygon-scatter-haikei.svg);
+    background-position: bottom;
+    background-size: cover;
+    overflow: hidden;
+}
+#navbar {
+    background-color: rgba(244, 165, 96, 0.247);
+    display: flex;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0;
+}
+#slidesContainer {
+    color:lavender;
+    background-color: rgba(128, 128, 128, 0.300);
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 75vw;
+    text-align: center;
+    justify-content: center;
+    align-items: flex-start; 
+    overflow: hidden;
+    margin: 0;
+}
+#slidesTextContainer {
+    flex: 1 1 94vh;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(110, 9, 9, 0.3);
+    background-size: cover; 
+    overflow: hidden;
+    margin: 0;
+}
+#nameContainer {
+    flex: 1 1 6vh;
+    max-height: 6vh;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0;
+}
+#slideButtonLeft {
+    display: flex;
+    background-color: crimson;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 10vw;
+    font-size: 2.5vw;
+    max-height: 6vh;
+    max-width: 10vw;
+    margin: 0;
+}
+#slideButtonRight {
+    display: flex;
+    background-color: crimson;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 10vw;
+    font-size: 2.5vw;
+    max-height: 6vh;
+    max-width: 10vw;
+    margin: 0;
+}
+#slideButtonRight:hover, #slideButtonLeft:hover {
+    color: #BFFF00;
+}
+#nameText {
+    background-color: rgba(188, 143, 143, 0.24);
+    margin: 0;
+    background-size: cover;
+    justify-content: center;
+    align-items: center; 
+    width: 100%;
+    flex: 10 1 55vw;
+    font-size: 4vh
+}
+#navbarContainer {
+    height: 100%;
+    flex: 1 1 25vw;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0;
+}
+#about {
+    background-color: #E4572E;
+    box-shadow: 0.5vw 0.5vw rgb(196, 62, 9);
+    margin-right: 10%;
+    margin-top: 5%
+}
+#experience {
+    background-color: #4F9D69;
+    box-shadow: 0.5vw 0.5vw #2c573a;
+    margin-left: 10%;
+}
+#projects {
+    background-color: #861657;
+    box-shadow: 0.5vw 0.5vw #420b2b;
+    margin-right: 10%;
+}
+#interests {
+    background-color: rgb(34, 34, 36);
+    box-shadow: 0.5vw 0.5vw rgb(21, 21, 22);
+    margin-left: 10%;
+}
+
+@media screen and (max-width: 767px) {
+
+    p {
+        margin: 3vh 1vh 1vh 1vh;
+        padding: 0vw 1vw 0vw 1vw;
+        overflow-x: hidden;
+        word-break: break-all;
+        white-space: normal;
+        justify-content: left;
+        font-size: 60%;
+    
+        scrollbar-width: 1vw;
+        scrollbar-color: #4F9D69 transparent;
+    }
+    #pageContainer {
+        width: 100%;
+        margin: 0;
+        flex: 1 1 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #000000;
+        align-items: flex-start;
+        background-image: url(../imgs/polygon-scatter-haikei.svg);
+        background-position: bottom;
+        background-size: cover;
+        overflow: hidden;
+    }
+    #slidesTextContainer {
+        flex: 1 1 95vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(110, 9, 9, 0.3);
+        background-size: cover; 
+        overflow: hidden;
+    }
+    #navbarContainer {
+        width: 100%;
+        flex: 0 1 5vh;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        background-color: rgba(112, 182, 46, 0.247);
+    }
+    #navbar {
+        background-color: rgba(244, 165, 96, 0.247);
+        display: flex;
+        flex: 1 1 100vw;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        height: 100%;
+        flex-direction: row;
+        overflow: hidden;
+        margin: 0;
+    }
+    .navbarButton {
+        color: lavender;
+        font-size: 2.5vw;
+        justify-content: center;
+        align-items: flex-start;
+        border-radius: 3vw;
+        display: flex;
+        flex: 1;
+        flex-wrap: wrap;
+        overflow: hidden;
+        margin: 1% 5% 1% 5%;
+    }
+    #about {
+        background-color: #E4572E;
+        box-shadow: 0.5vw 0.5vw rgb(196, 62, 9);
+        margin: 1%;
+    }
+    #experience {
+        background-color: #4F9D69;
+        box-shadow: 0.5vw 0.5vw #2c573a;
+        margin: 1%;
+    }
+    #projects {
+        background-color: #861657;
+        box-shadow: 0.5vw 0.5vw #420b2b;
+        margin: 1%;
+    }
+    #interests {
+        background-color: rgb(34, 34, 36);
+        box-shadow: 0.5vw 0.5vw rgb(21, 21, 22);
+        margin: 1%;
+    }
+    footer {
+        flex: 1 1 10vh;
+        overflow-y: hidden;
+        background-color: rgb(20, 19, 19);
+        background-size: cover;
+        color: khaki;
+        text-align: center;
+        margin-top: auto;
+        overflow-x: hide;
+    }
 }
