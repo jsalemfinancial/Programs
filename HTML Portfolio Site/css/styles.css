@@ -234,6 +234,15 @@ footer {
         scrollbar-width: 1vw;
         scrollbar-color: #4F9D69 transparent;
     }
+    #nameContainer {
+        flex: 1 1 6vh;
+        max-height: 6vh;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        margin: 0;
+        order: 1;
+    }
     #pageContainer {
         width: 100%;
         margin: 0;
@@ -246,6 +255,9 @@ footer {
         background-position: bottom;
         background-size: cover;
         overflow: hidden;
+    }
+    #slidesContainer {
+        order: 3;
     }
     #slidesTextContainer {
         flex: 1 1 95vh;
@@ -265,6 +277,7 @@ footer {
         justify-content: center;
         align-items: flex-start;
         background-color: rgba(112, 182, 46, 0.247);
+        order: 2;
     }
     #navbar {
         background-color: rgba(244, 165, 96, 0.247);
