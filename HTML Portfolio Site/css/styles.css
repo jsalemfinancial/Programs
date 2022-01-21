@@ -91,7 +91,6 @@ footer {
 
     padding: 0vw 4vw 0vw 5vw;
     margin-right: 1vw;
-    margin-top: 1vh;
     max-height: 90vh;
     overflow: hidden scroll;
     flex: 1;
@@ -112,7 +111,6 @@ footer {
     flex: 1 1 75vw;
     height: 100%;
     width: 100%;
-    margin-top: 1vh;
     justify-content: center;
     align-items: center; 
     overflow: hidden;
