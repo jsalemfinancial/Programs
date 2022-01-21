@@ -9,78 +9,152 @@
 <body>
     <script src="js/jquery-3.6.0.js"></script>
     <script>
-        var counter = 0;
-        function nextSlide() {
+        class Slides {
+
+        counter;
+        currentSlide;
+
+        constructor(counter) {
+            this.counter = 0;
+        }
+
+        nextSlide() {
+            var container = document.getElementById("slidesTextContainer");
             var numClasses = ($('#slidesTextContainer .slidesText').length);
-            var container = document.getElementById("slidesTextContainer");
 
-            container.getElementsByClassName("slidesText")[counter].style.display = "none";
-            counter++;
-            if (counter > numClasses - 1) {
-                counter = 0;
+            container.getElementsByClassName("slidesText")[this.counter].style.display = "none";
+
+            this.counter++;
+            if (this.counter > numClasses - 1) {
+                this.counter = 0;
             }
-            counter%numClasses;
-            container.getElementsByClassName("slidesText")[counter].style.display = "unset";
-        };
+            this.counter = (this.counter)%numClasses;
 
-        function prevSlide() {
-            var numClasses = ($('#slidesTextContainer .slidesText').length - 1);
+            container.getElementsByClassName("slidesText")[this.counter].style.display = "unset";
+            this.textCounter();
+            console.log("Executed. " + "Counter: " + this.counter);
+        }
+
+        prevSlide() {
             var container = document.getElementById("slidesTextContainer");
+            var numClasses = ($('#slidesTextContainer .slidesText').length);
 
-            container.getElementsByClassName("slidesText")[counter].style.display = "none";
-            counter--;
-            if (counter < 0) {
-                counter = numClasses;
+            container.getElementsByClassName("slidesText")[this.counter].style.display = "none";
+
+            this.counter--;
+            if (this.counter < 0) {
+                this.counter = numClasses - 1;
             }
-            counter%numClasses;
-            container.getElementsByClassName("slidesText")[counter].style.display = "unset";
-        };
+
+            container.getElementsByClassName("slidesText")[this.counter].style.display = "unset";
+            this.textCounter();
+            console.log("Executed. " + "Counter: " + this.counter);
+        }
+
+        textCounter() {
+            var counterText = document.getElementById("slideCounter");
+            var numClasses = ($('#slidesTextContainer .slidesText').length);
+            counterText.innerHTML = (this.counter + 1) + "/" + numClasses;
+        }
+    }
+
+    const SlideSet = new Slides();
     </script>
 
     <header id= "pageContainer">
-        <div id= "nameContainer">
-            <div id="slideButtonLeft" onclick="prevSlide()"><h2 style="margin-top: -0.75vw">&#x2039;</h2></div>
-            <h1 id= "nameText">Joseph Salem</h1>
-            <div id="slideButtonRight" onclick="nextSlide()"><h2 style="margin-top: -0.75vw">&#x203A;</h2></div>
+        <div id= "nameContainerMobile">
+            <h1 id= "nameText">Joseph Salem/Slide Titles/Whatever</h1>
+            <h2 style="flex: 0; font-size: 2vh">Subtitles</h2>
         </div>
         
         <div id="slidesContainer">
+            <div id= "nameContainer">
+                <h1 id= "nameText">Joseph Salem/Slide Titles/Whatever</h1>
+                <h2 style="flex: 0; font-size: 2vh">Subtitles</h2>
+            </div>
+
             <div id="slidesTextContainer">
-                    <p class="slidesText">
-                        (0) texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                        texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                        texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                        texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
+                    <div class="slidesText">
+                        <p>(0) Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim facilisis gravida neque convallis a. Ultrices dui sapien eget mi proin. Neque aliquam vestibulum morbi blandit cursus risus at. At augue eget arcu dictum varius duis at consectetur lorem. Et odio pellentesque diam volutpat commodo sed egestas. Id cursus metus aliquam eleifend mi. Nisi vitae suscipit tellus mauris. Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Rhoncus est pellentesque elit ullamcorper dignissim cras.
+
+                        Vestibulum lorem sed risus ultricies. Placerat orci nulla pellentesque dignissim. Amet purus gravida quis blandit. Vivamus arcu felis bibendum ut tristique. Integer feugiat scelerisque varius morbi enim nunc faucibus a. Enim lobortis scelerisque fermentum dui. Pharetra magna ac placerat vestibulum lectus mauris ultrices eros in. Fames ac turpis egestas integer eget aliquet nibh praesent tristique. A diam maecenas sed enim. Mi proin sed libero enim sed faucibus. Sed arcu non odio euismod lacinia.
+                        
+                        Eu scelerisque felis imperdiet proin fermentum leo vel orci. Egestas quis ipsum suspendisse ultrices. Aenean sed adipiscing diam donec adipiscing tristique risus nec. In est ante in nibh mauris cursus. Sit amet aliquam id diam maecenas ultricies. Posuere ac ut consequat semper viverra nam. Dolor sit amet consectetur adipiscing. Diam vel quam elementum pulvinar etiam. Nunc vel risus commodo viverra maecenas accumsan lacus vel. Felis imperdiet proin fermentum leo. Et tortor consequat id porta nibh venenatis cras sed felis. Sem nulla pharetra diam sit amet nisl suscipit adipiscing bibendum. Aliquam ut porttitor leo a diam.
+                        
+                        Dapibus ultrices in iaculis nunc sed augue. Nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Massa ultricies mi quis hendrerit. Proin nibh nisl condimentum id venenatis a. Dui sapien eget mi proin sed libero. Lectus quam id leo in vitae turpis. Purus non enim praesent elementum facilisis leo vel. Rhoncus est pellentesque elit ullamcorper. Egestas quis ipsum suspendisse ultrices. Egestas sed tempus urna et pharetra pharetra massa massa.
+                        
+                        Accumsan tortor posuere ac ut consequat semper viverra nam. Quisque sagittis purus sit amet. Lacinia at quis risus sed. Ac felis donec et odio. Orci nulla pellentesque dignissim enim sit amet venenatis urna cursus. Consequat ac felis donec et odio pellentesque. Dolor sit amet consectetur adipiscing elit ut aliquam purus sit. Et malesuada fames ac turpis egestas. Nisl purus in mollis nunc sed id semper risus. Phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec. At tempor commodo ullamcorper a lacus. Dignissim cras tincidunt lobortis feugiat. Purus semper eget duis at tellus at. Sollicitudin tempor id eu nisl nunc mi. Quis blandit turpis cursus in hac habitasse platea. Eget egestas purus viverra accumsan in nisl. Tempor orci eu lobortis elementum nibh. Tellus at urna condimentum mattis pellentesque id.
+                        
+                        Commodo odio aenean sed adipiscing. Massa eget egestas purus viverra accumsan in nisl nisi scelerisque. Ullamcorper morbi tincidunt ornare massa. Tellus in metus vulputate eu. Massa tincidunt dui ut ornare lectus sit amet est. Justo eget magna fermentum iaculis. Urna et pharetra pharetra massa massa ultricies. A scelerisque purus semper eget duis. Massa vitae tortor condimentum lacinia quis. Amet cursus sit amet dictum sit.
+                        
+                        Tellus in hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Enim ut tellus elementum sagittis vitae et leo duis. Tellus in metus vulputate eu scelerisque felis imperdiet proin fermentum. Quisque egestas diam in arcu cursus euismod quis viverra nibh. Quam elementum pulvinar etiam non quam lacus suspendisse faucibus. Mus mauris vitae ultricies leo. Risus ultricies tristique nulla aliquet. Risus pretium quam vulputate dignissim suspendisse in est ante. Enim eu turpis egestas pretium aenean pharetra magna ac placerat. Dolor purus non enim praesent. Dolor morbi non arcu risus quis varius quam quisque id. Vitae tortor condimentum lacinia quis. Lectus urna duis convallis convallis tellus id interdum. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed.
+                        
+                        Egestas dui id ornare arcu odio ut sem nulla pharetra. Nibh ipsum consequat nisl vel pretium lectus quam. Neque gravida in fermentum et sollicitudin ac orci. Quam elementum pulvinar etiam non quam. Arcu dictum varius duis at consectetur lorem donec. Dui ut ornare lectus sit amet est placerat in egestas. Diam quam nulla porttitor massa id neque aliquam vestibulum morbi. Non diam phasellus vestibulum lorem sed. Risus pretium quam vulputate dignissim suspendisse in est ante in. Tempus egestas sed sed risus. Et pharetra pharetra massa massa ultricies mi quis hendrerit dolor. Eget nulla facilisi etiam dignissim diam quis. Mauris pellentesque pulvinar pellentesque habitant morbi. Dui sapien eget mi proin sed libero enim sed. Diam in arcu cursus euismod quis viverra nibh. Non quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Consectetur purus ut faucibus pulvinar elementum. Libero nunc consequat interdum varius sit. Pretium fusce id velit ut. Amet porttitor eget dolor morbi non arcu risus.
+                        
+                        Sed vulputate odio ut enim. Praesent elementum facilisis leo vel fringilla est. Amet nulla facilisi morbi tempus iaculis urna. Feugiat nisl pretium fusce id velit. Odio eu feugiat pretium nibh. Pretium viverra suspendisse potenti nullam ac tortor. Amet venenatis urna cursus eget nunc scelerisque viverra mauris. Pellentesque sit amet porttitor eget dolor morbi non arcu risus. Morbi leo urna molestie at. In ante metus dictum at tempor. Est lorem ipsum dolor sit. A pellentesque sit amet porttitor eget dolor morbi. Sed arcu non odio euismod lacinia at quis risus. Nam libero justo laoreet sit amet cursus sit amet. Cursus mattis molestie a iaculis at erat pellentesque adipiscing commodo. Sed elementum tempus egestas sed sed risus.
+                        
+                        Sed viverra tellus in hac habitasse platea dictumst vestibulum. Posuere morbi leo urna molestie. Mattis rhoncus urna neque viverra justo nec. Nec nam aliquam sem et tortor consequat. Habitant morbi tristique senectus et netus et malesuada fames. Ullamcorper morbi tincidunt ornare massa eget. Consequat interdum varius sit amet. Scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus. Amet commodo nulla facilisi nullam vehicula. Sem nulla pharetra diam sit amet nisl suscipit adipiscing. Tincidunt vitae semper quis lectus nulla at volutpat. Turpis tincidunt id aliquet risus feugiat. In hendrerit gravida rutrum quisque. Integer vitae justo eget magna. Sem integer vitae justo eget. Vitae ultricies leo integer malesuada nunc vel risus commodo. Malesuada bibendum arcu vitae elementum curabitur. Consectetur adipiscing elit duis tristique sollicitudin nibh. At in tellus integer feugiat scelerisque varius morbi. Ut placerat orci nulla pellentesque dignissim enim.
+                        
+                        Nunc lobortis mattis aliquam faucibus purus in massa. Ornare aenean euismod elementum nisi. Diam sollicitudin tempor id eu nisl nunc. Facilisis sed odio morbi quis. Sed nisi lacus sed viverra. Vitae ultricies leo integer malesuada nunc. Aenean vel elit scelerisque mauris pellentesque. At lectus urna duis convallis convallis. Facilisis mauris sit amet massa vitae tortor condimentum lacinia. Vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae. Diam volutpat commodo sed egestas egestas fringilla phasellus. Ultricies tristique nulla aliquet enim tortor. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna. Amet risus nullam eget felis eget nunc lobortis mattis aliquam. Quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus urna. Vulputate eu scelerisque felis imperdiet. Quisque egestas diam in arcu cursus. Quis commodo odio aenean sed adipiscing diam donec adipiscing. Gravida in fermentum et sollicitudin ac orci phasellus.
+                        
+                        Ultricies integer quis auctor elit sed vulputate. Tincidunt arcu non sodales neque sodales. Egestas congue quisque egestas diam. Leo vel fringilla est ullamcorper. Tellus cras adipiscing enim eu turpis egestas pretium aenean pharetra. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum. Scelerisque eu ultrices vitae auctor eu augue ut lectus. Neque laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt. Egestas egestas fringilla phasellus faucibus. Adipiscing tristique risus nec feugiat in fermentum posuere urna nec. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Eleifend quam adipiscing vitae proin sagittis nisl. Enim nec dui nunc mattis. Purus sit amet luctus venenatis lectus magna fringilla. Est placerat in egestas erat imperdiet sed. In aliquam sem fringilla ut morbi tincidunt augue.
+                        
+                        Est ullamcorper eget nulla facilisi etiam dignissim diam quis enim. Consectetur libero id faucibus nisl tincidunt eget nullam. Consequat nisl vel pretium lectus quam id leo in vitae. Nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque. Nibh tortor id aliquet lectus proin nibh nisl. Ultricies mi eget mauris pharetra et ultrices neque. Senectus et netus et malesuada fames ac turpis egestas. Rutrum tellus pellentesque eu tincidunt tortor. Egestas dui id ornare arcu odio. Cursus sit amet dictum sit amet. Vel orci porta non pulvinar neque laoreet suspendisse interdum consectetur.
+                        
+                        Non tellus orci ac auctor augue mauris. At varius vel pharetra vel turpis nunc eget lorem. Vel eros donec ac odio tempor orci dapibus. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet. Diam volutpat commodo sed egestas egestas. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor. Enim tortor at auctor urna. Aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Orci dapibus ultrices in iaculis nunc sed augue lacus viverra. Id donec ultrices tincidunt arcu non sodales neque sodales ut. Amet volutpat consequat mauris nunc congue nisi. Lorem sed risus ultricies tristique nulla aliquet enim tortor.
+                        
+                        Ultricies leo integer malesuada nunc vel risus commodo viverra. Tincidunt arcu non sodales neque sodales ut etiam sit amet. Malesuada pellentesque elit eget gravida cum sociis natoque. Neque gravida in fermentum et. Nascetur ridiculus mus mauris vitae ultricies leo. Euismod lacinia at quis risus. Sed id semper risus in hendrerit gravida rutrum. Suspendisse interdum consectetur libero id. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor elit. Ut tortor pretium viverra suspendisse potenti. Ac auctor augue mauris augue neque gravida in fermentum et. Odio ut sem nulla pharetra. Quisque sagittis purus sit amet volutpat. Tortor vitae purus faucibus ornare suspendisse. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper.
+                        </p>
+                    <!-- TradingView Widget BEGIN -->
+                    <div class="tradingview-widget-copyright" style="display: block"><span style="color: white; font-size: 1bh;">Chart by</span>
+                        <a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank" style="display: inline-block">
+                        <h1 style="display: inline-block; color: #7dffa8; font-size: 3vh;">TradingView</h1></a></div>
+                    <div class="tradingview-widget-container" style="width: 100%; height: 100%; background-color: rgba(222, 184, 135, 0.438);">
+                        <div id="tradingview_d0b39" style="height: 100%"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                        <script type="text/javascript">
+                            new TradingView.widget(
+                            {
+                            "autosize": true,
+                            "symbol": "NASDAQ:AAPL",
+                            "interval": "D",
+                            "timezone": "Etc/UTC",
+                            "theme": "light",
+                            "style": "1",
+                            "locale": "en",
+                            "toolbar_bg": "#f1f3f6",
+                            "enable_publishing": false,
+                            "allow_symbol_change": true,
+                            "container_id": "tradingview_d0b39"
+                        });
+                        </script>
+                      </div>
+                      <!-- TradingView Widget END -->
+                    </div>
+                    <p class="slidesText" style="display: none">
+                        (1)
                     </p>
                     <p class="slidesText" style="display: none">
-                        (1) texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                        texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                        texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
+                        (2)
                     </p>
-                    <p class="slidesText" style="display: none">
-                        (2) texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                        texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
-                    </p>
+                    <div id="slidesButtonContainer">
+                        <h2 id="slideButtonLeft" onclick="SlideSet.prevSlide()">&#x2039;</h2>
+                        <h2 id="slideCounter">1/3</h2>
+                        <h2 id="slideButtonRight" onclick="SlideSet.nextSlide()">&#x203A;</h2>
+                    </div>
             </div>
         </div>
 
-        <div id= "navbarContainer">
-            <div id= "navbar">
-                <a href="https://www.cnn.com/business/markets/premarkets" class="navbarButton" id="about"> About</a>
-                <a href="https://www.cnn.com/business/markets/premarkets" class="navbarButton" id="experience"> Experience</a>
-                <a href="https://www.cnn.com/business/markets/premarkets" class="navbarButton" id="projects"> Projects</a>
-                <a href="https://www.cnn.com/business/markets/premarkets" class="navbarButton" id="interests"> Interests</a>
+            <div id="navbar">
+                <h1 class="navbarButton" id="about">About</h1>
+                <h1 class="navbarButton" id="experience">Experience</h1>
+                <h1 class="navbarButton" id="projects">Projects</h1>
+                <h1 class="navbarButton" id="interests">Interests</h1>
             </div>
-        </div>
     </header>
 
     <footer>
-        <h1 style="margin: 0; width: 100%; font-size: 2vh">Footer!</h1>
-        <p style="font-size: 1vw;">Junk</p>
-        <br></br>
-        <p style="font-size: 1vw;">Junk Junk</p>
-        <br></br>
-        <p style="font-size: 1vw;">JunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunkJunk</p>
+        <h1 style="font-size: 2vh;">Footer!</h1>
     </footer>
 </body>
 </html>
