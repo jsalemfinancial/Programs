@@ -42,10 +42,6 @@ class Screener(EWrapper, EClient):
     def reqMktData(self, reqId, contract, genericTickList, snapshot, regulatorySnapshot, mktDataOptions):
         print(contract)
         return super().reqMktData(reqId, contract, genericTickList, snapshot, regulatorySnapshot, mktDataOptions)
-    
-    def tickSize(self, reqId, tickType, size):
-            print(size)
-    
     def historicalData(self, reqId, bar):
         #super().historicalData(reqId, bar)
         self.data["open"].append(bar.open)
