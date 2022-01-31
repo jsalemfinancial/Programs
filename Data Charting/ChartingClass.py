@@ -1,17 +1,16 @@
+import imp
+# from ibapi.client import EClient
+# from ibapi.wrapper import EWrapper
 from ibapi.client import EClient
 from ibapi.wrapper import EWrapper
-import queue
 import pandas as pd
 import datetime
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-q = queue.Queue()
-queryTime = (datetime.datetime.today() - datetime.timedelta(days=180)).strftime("%Y%m%d %H:%M:%S")
-
-class Screener(EWrapper, EClient):
-    data = pd.DataFrame(columns=["Open", "High", "Low", "Close", "Date"])
+class Charter(EWrapper, EClient):
+    data = pd.DataFrame(columns=["Date", "Open", "High", "Low", "Close"])
 
     def __init__(self):
         EWrapper.__init__(self)
@@ -41,11 +40,9 @@ class Screener(EWrapper, EClient):
             print("Error: ", reqId, " ", errorCode, " ", errorString)
 
     def historicalData(self, reqId, bar):
-        self.data = self.data.append({"Open": bar.open, "High": bar.high, "Low": bar.low, "Close": bar.close, "Date": bar.date}, ignore_index = True)
+        self.data = self.data.append({"Date": datetime.datetime.strptime(bar.date, "%Y%m%d %H:%M:%S"), "Open": bar.open, "High": bar.high, "Low": bar.low, "Close": bar.close}, ignore_index = True)
 
     def historicalDataEnd(self, reqId, start, end):
-        print(self.data)
-        print("Done printing data!")
-        self.data.to_csv(dir_path+"\\data.csv", index=True)
-        print("Done writing to cvs, Id: ", reqId)
+        self.data.to_csv(dir_path+"\\data.csv", index=False)
+        print("Done writing to csv, Id: ", reqId)
         self.disconnectClient()
