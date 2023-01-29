@@ -20,11 +20,10 @@ int sock::ServSocket::init() {
     
     sockaddr_in hint;
     hint.sin_family = AF_INET;
+    hint.sin_addr.S_un.S_addr = INADDR_ANY;
     hint.sin_port = htons(servPort);
-    inet_pton(AF_INET, servAddress, &hint.sin_addr);
 
-    int bindResult = bind(servSocket, (sockaddr* )&hint, sizeof(hint));
-    if (bindResult == SOCKET_ERROR) {
+    if (bind(servSocket, (sockaddr*)&hint, sizeof(hint)) == SOCKET_ERROR) {
         std::cout << "Error at bind: ";
         closesocket(servSocket);
         FD_CLR(servSocket, &servMaster);
@@ -33,8 +32,7 @@ int sock::ServSocket::init() {
         return WSAGetLastError();
     }
 
-    SOCKET listenResult = listen(servSocket, SOMAXCONN);
-    if (listenResult == SOCKET_ERROR) {
+    if (listen(servSocket, SOMAXCONN) == SOCKET_ERROR) {
         std::cout << "Error at socket() listen: ";
         WSACleanup();
 
@@ -48,47 +46,20 @@ int sock::ServSocket::init() {
 };
 
 int sock::ServSocket::start() {
-    fd_set masterCopy = servMaster;
+    SOCKET client = INVALID_SOCKET;
+    sockaddr_in from;
+    int fromlen = sizeof(from);
 
-    int sockets = select(0, &masterCopy, nullptr, nullptr, nullptr);
-
-    for (int i = 0; i < sockets; i++) {
-        SOCKET sock = masterCopy.fd_array[i];
-
-        if (sock == servSocket) {
-            SOCKET client = accept(servSocket, nullptr, nullptr);
-
-            FD_SET(client, &servMaster);
-
-            onClientConnect(client);
-        } else {
-            char buffer[512];
-            ZeroMemory(buffer, 512);
-
-            int szIn = recv(sock, buffer, 512, 0);
-            if (szIn <= 0) {
-
-                onClientDisconnect(sock);
-
-                closesocket(sock);
-                FD_CLR(sock, &servMaster);
-            } else {
-                onMsgRecv(sock, buffer, szIn);
-            };
-        };
+    while(client == INVALID_SOCKET) {
+        client = accept(servSocket, (struct sockaddr*)&from, &fromlen);
     };
 
-    FD_CLR(servSocket, &servMaster);
+    std::cout << "Connection from " << inet_ntoa(from.sin_addr) <<"\r\n";
+    onClientConnect(client, from, fromlen);
+
     closesocket(servSocket);
-
-    while (servMaster.fd_count > 0) {
-        SOCKET sock = servMaster.fd_array[0];
-
-        FD_CLR(sock, &servMaster);
-        closesocket(sock);
-    };
-
     WSACleanup();
+
     return 0;
 };
 
@@ -99,14 +70,15 @@ void sock::ServSocket::toClientBroadcast(int clientSock, const char* msg, int le
 void sock::ServSocket::fromClientbroadcast(int clientSock, const char* msg, int len) {
     for (int i = 0; i < servMaster.fd_count; i++) {
         SOCKET outSock = servMaster.fd_array[i];
+
         if (outSock != servSocket && outSock != clientSock) {
             toClientBroadcast(outSock, msg, len);
         };
     };
 };
 
-void sock::ServSocket::onClientConnect(int clientSock) {
-
+void sock::ServSocket::onClientConnect(int clientSock, sockaddr_in from, int fromlen) {
+       std::cout << "Connection from " << clientSock <<"\r\n";
 };
 
 void sock::ServSocket::onClientDisconnect(int clientSock) {

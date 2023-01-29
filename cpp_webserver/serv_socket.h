@@ -3,9 +3,9 @@
 
 #include <winsock2.h>
 #include <windows.h>
-#include <iostream>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
+#include <iostream>
 
 
 namespace sock {
@@ -17,7 +17,7 @@ namespace sock {
             int start();
 
         protected:
-            virtual void onClientConnect(int clientSock);
+            virtual void onClientConnect(int clientSock, sockaddr_in from, int fromlen);
             virtual void onClientDisconnect(int clientSock);
             virtual void onMsgRecv(int clientSock, const char* msg, int len);
             void toClientBroadcast(int clientSock, const char* msg, int len);

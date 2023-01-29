@@ -1,14 +1,14 @@
-#include "multi_client.h"
+#include "web_serv.h"
 
 
 
 int main() {
-    multic::MultiClient mc("0.0.0.0", 27015);
-    if (mc.init() != 0) {
+    webserv::WebServ webServer("127.0.0.1", 27015);
+    if (webServer.init() != 0) {
         return 1;
     }
 
-    mc.start();
+    webServer.start();
 
     system("pause");
     return 0;
