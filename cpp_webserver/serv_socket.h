@@ -15,9 +15,10 @@ namespace sock {
 
             int init();
             int start();
+            int stop();
 
         protected:
-            virtual void onClientConnect(int clientSock, sockaddr_in from, int fromlen);
+            virtual void onClientConnect(int clientSock);
             virtual void onClientDisconnect(int clientSock);
             virtual void onMsgRecv(int clientSock, const char* msg, int len);
             void toClientBroadcast(int clientSock, const char* msg, int len);

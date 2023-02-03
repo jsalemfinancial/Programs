@@ -55,13 +55,31 @@ int sock::ServSocket::start() {
     };
 
     std::cout << "Connection from " << inet_ntoa(from.sin_addr) <<"\r\n";
-    onClientConnect(client, from, fromlen);
 
-    closesocket(servSocket);
-    WSACleanup();
+    onClientConnect(client);
+    stop();
 
     return 0;
 };
+
+int sock::ServSocket::stop() {
+
+    char option = 'n';
+
+    while (servSocket != INVALID_SOCKET) {
+        std::cout <<  "Close Socket Loop on Refresh? [y/n]: ";
+        std::cin >> option;
+    };
+
+    if (option == 'n') {
+        start();
+    } else {
+        closesocket(servSocket);
+        WSACleanup();
+    };
+
+    return 0;
+}
 
 void sock::ServSocket::toClientBroadcast(int clientSock, const char* msg, int len) {
     send(clientSock, msg, len, 0);
@@ -77,7 +95,7 @@ void sock::ServSocket::fromClientbroadcast(int clientSock, const char* msg, int 
     };
 };
 
-void sock::ServSocket::onClientConnect(int clientSock, sockaddr_in from, int fromlen) {
+void sock::ServSocket::onClientConnect(int clientSock) {
        std::cout << "Connection from " << clientSock <<"\r\n";
 };
 
