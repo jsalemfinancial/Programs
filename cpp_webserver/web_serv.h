@@ -5,6 +5,8 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <iterator>
+#include <vector>
 
 
 namespace webserv {
@@ -13,8 +15,8 @@ namespace webserv {
             WebServ(const char* address, int port): ServSocket(address, port) {};
 
         protected:
-            virtual void onClientConnect(int clientSock);
-            virtual void onClientDisconnect(int clientSock);
+            // virtual void onClientConnect(SOCKADDR_IN clientInfo);
+            // virtual void onClientDisconnect(int clientSock);
             virtual void onMsgRecv(int clientSock, const char* msg, int len);
     };
 };

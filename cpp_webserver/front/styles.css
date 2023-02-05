@@ -1,0 +1,8 @@
+#welcome {
+    background-color: palevioletred;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

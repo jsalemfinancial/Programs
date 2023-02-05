@@ -46,21 +46,80 @@ int sock::ServSocket::init() {
 };
 
 int sock::ServSocket::start() {
-    SOCKET client = INVALID_SOCKET;
-    sockaddr_in from;
-    int fromlen = sizeof(from);
+	// this will be changed by the \quit command (see below, bonus not in video!)
+	bool running = true;
 
-    while(client == INVALID_SOCKET) {
-        client = accept(servSocket, (struct sockaddr*)&from, &fromlen);
-    };
+	while (running) {
+		// Make a copy of the master file descriptor set, this is SUPER important because
+		// the call to select() is _DESTRUCTIVE_. The copy only contains the sockets that
+		// are accepting inbound connection requests OR messages. 
 
-    std::cout << "Connection from " << inet_ntoa(from.sin_addr) <<"\r\n";
+		// E.g. You have a server and it's master file descriptor set contains 5 items;
+		// the listening socket and four clients. When you pass this set into select(), 
+		// only the sockets that are interacting with the server are returned. Let's say
+		// only one client is sending a message at that time. The contents of 'copy' will
+		// be one socket. You will have LOST all the other sockets.
 
-    onClientConnect(client);
-    stop();
+		// SO MAKE A COPY OF THE MASTER LIST TO PASS INTO select() !!!
 
-    return 0;
-};
+		fd_set masterCopy = servMaster;
+
+		// See who's talking to us
+		int currSocket = select(0, &masterCopy, nullptr, nullptr, nullptr);
+
+		// Loop through all the current connections / potential connect
+		for (int i = 0; i < currSocket; i++) {
+			// Makes things easy for us doing this assignment
+			SOCKET sock = masterCopy.fd_array[i];
+
+			// Is it an inbound communication?
+			if (sock == servSocket) {
+				// Accept a new connection
+                SOCKADDR_IN clientInfo = {0};
+                int addrSz = sizeof(clientInfo);
+				SOCKET client = accept(servSocket, (sockaddr*)&clientInfo, &addrSz);
+
+				// Add the new connection to the list of connected clients
+				FD_SET(client, &servMaster);
+
+				onClientConnect(clientInfo);
+			} else { // It's an inbound message
+				char buf[4096];
+				ZeroMemory(buf, 4096);
+
+				// Receive message
+				int bytesIn = recv(sock, buf, 4096, 0);
+				if (bytesIn <= 0) {
+					// Drop the client
+					onClientDisconnect(sock);
+					closesocket(sock);
+					FD_CLR(sock, &servMaster);
+				} else {
+					onMsgRecv(sock, buf, bytesIn);
+				}
+			}
+		}
+	}
+
+	// Remove the listening socket from the master file descriptor set and close it
+	// to prevent anyone else trying to connect.
+	FD_CLR(servSocket, &servMaster);
+	closesocket(servSocket);
+
+	while (servMaster.fd_count > 0) {
+		// Get the socket number
+		SOCKET sock = servMaster.fd_array[0];
+
+		// Remove it from the master file list and close the socket
+		FD_CLR(sock, &servMaster);
+		closesocket(sock);
+	}
+
+	// Cleanup winsock
+	WSACleanup();
+	return 0;
+}
+
 
 int sock::ServSocket::stop() {
 
@@ -95,8 +154,8 @@ void sock::ServSocket::fromClientbroadcast(int clientSock, const char* msg, int 
     };
 };
 
-void sock::ServSocket::onClientConnect(int clientSock) {
-       std::cout << "Connection from " << clientSock <<"\r\n";
+void sock::ServSocket::onClientConnect(SOCKADDR_IN clientInfo) {
+    std::cout << "Connection from: " << inet_ntoa(clientInfo.sin_addr) <<"\r\n";
 };
 
 void sock::ServSocket::onClientDisconnect(int clientSock) {
