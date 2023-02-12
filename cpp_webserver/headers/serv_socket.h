@@ -30,6 +30,6 @@ namespace sock {
             int servSocket;
             fd_set servMaster;
     };
-};
+}
 
 #endif // serv_socket_h

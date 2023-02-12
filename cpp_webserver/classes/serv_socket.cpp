@@ -1,4 +1,4 @@
-#include "serv_socket.h"
+#include "../headers/serv_socket.h"
 
 // Outside method calls for ServSocket class.
 int sock::ServSocket::init() {
@@ -9,14 +9,14 @@ int sock::ServSocket::init() {
     if (initResult != 0) {
         std::cout << "WSAStartup Failed with Code: ";
         return initResult;
-    };
+    }
 
     servSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (servSocket == INVALID_SOCKET) {
         std::cout << "Error at socket(): ";
-            WSACleanup();
-            return WSAGetLastError();
-        }
+        WSACleanup();
+        return WSAGetLastError();
+    }
     
     sockaddr_in hint;
     hint.sin_family = AF_INET;
@@ -43,55 +43,33 @@ int sock::ServSocket::init() {
     FD_SET(servSocket, &servMaster);
 
     return 0;
-};
+}
 
 int sock::ServSocket::start() {
-	// this will be changed by the \quit command (see below, bonus not in video!)
-	bool running = true;
-
-	while (running) {
-		// Make a copy of the master file descriptor set, this is SUPER important because
-		// the call to select() is _DESTRUCTIVE_. The copy only contains the sockets that
-		// are accepting inbound connection requests OR messages. 
-
-		// E.g. You have a server and it's master file descriptor set contains 5 items;
-		// the listening socket and four clients. When you pass this set into select(), 
-		// only the sockets that are interacting with the server are returned. Let's say
-		// only one client is sending a message at that time. The contents of 'copy' will
-		// be one socket. You will have LOST all the other sockets.
-
-		// SO MAKE A COPY OF THE MASTER LIST TO PASS INTO select() !!!
-
+	while (true) {
 		fd_set masterCopy = servMaster;
-
-		// See who's talking to us
 		int currSocket = select(0, &masterCopy, nullptr, nullptr, nullptr);
 
-		// Loop through all the current connections / potential connect
 		for (int i = 0; i < currSocket; i++) {
-			// Makes things easy for us doing this assignment
 			SOCKET sock = masterCopy.fd_array[i];
 
-			// Is it an inbound communication?
 			if (sock == servSocket) {
-				// Accept a new connection
                 SOCKADDR_IN clientInfo = {0};
                 int addrSz = sizeof(clientInfo);
+
 				SOCKET client = accept(servSocket, (sockaddr*)&clientInfo, &addrSz);
 
-				// Add the new connection to the list of connected clients
 				FD_SET(client, &servMaster);
 
 				onClientConnect(clientInfo);
-			} else { // It's an inbound message
-				char buf[4096];
-				ZeroMemory(buf, 4096);
+			} else {
+				char buf[512];
+				ZeroMemory(buf, sizeof(buf));
 
-				// Receive message
-				int bytesIn = recv(sock, buf, 4096, 0);
+				int bytesIn = recv(sock, buf, sizeof(buf), 0);
 				if (bytesIn <= 0) {
-					// Drop the client
 					onClientDisconnect(sock);
+
 					closesocket(sock);
 					FD_CLR(sock, &servMaster);
 				} else {
@@ -120,7 +98,6 @@ int sock::ServSocket::start() {
 	return 0;
 }
 
-
 int sock::ServSocket::stop() {
 
     char option = 'n';
@@ -142,7 +119,7 @@ int sock::ServSocket::stop() {
 
 void sock::ServSocket::toClientBroadcast(int clientSock, const char* msg, int len) {
     send(clientSock, msg, len, 0);
-};
+}
 
 void sock::ServSocket::fromClientbroadcast(int clientSock, const char* msg, int len) {
     for (int i = 0; i < servMaster.fd_count; i++) {
@@ -150,18 +127,18 @@ void sock::ServSocket::fromClientbroadcast(int clientSock, const char* msg, int 
 
         if (outSock != servSocket && outSock != clientSock) {
             toClientBroadcast(outSock, msg, len);
-        };
-    };
-};
+        }
+    }
+}
 
 void sock::ServSocket::onClientConnect(SOCKADDR_IN clientInfo) {
-    std::cout << "Connection from: " << inet_ntoa(clientInfo.sin_addr) <<"\r\n";
-};
+    std::cout << "Connection from: " << inet_ntoa(clientInfo.sin_addr) << "\r\n";
+}
 
 void sock::ServSocket::onClientDisconnect(int clientSock) {
 
-};
+}
 
 void sock::ServSocket::onMsgRecv(int clientSock, const char* msg, int len) {
 
-};
+}

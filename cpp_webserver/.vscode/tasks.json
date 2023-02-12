@@ -9,7 +9,7 @@
                 "-g",
                 "${fileDirname}\\**.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "..\\server.exe",
                 "-lwsock32",
                 "-lws2_32",
                 "-liphlpapi",
