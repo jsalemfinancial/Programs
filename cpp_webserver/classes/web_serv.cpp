@@ -6,10 +6,12 @@ void webserv::WebServ::onMsgRecv(int clientSock, const char* msg, int len) {
 
     std::cout << msg << "\r\n";
 
-    std::string content = "<h1 style='text-align: center'>404 Page Not Found!</h1>";
-    std::string contentFile = "/index.html";
-    std::string contentType = "html";
-    std::string request;
+    std::ostringstream request;
+    std::ostringstream content;
+
+    std::string contentFile;
+    std::string contentType;
+
     int errCode = 404;
 
     if (parsed.size() >= 3 && parsed[0] == "GET") {
@@ -24,28 +26,36 @@ void webserv::WebServ::onMsgRecv(int clientSock, const char* msg, int len) {
             contentType = "text/javascript";
         } else if (contentFile.substr(contentFile.find('.') + 1) == "pdf") {
             contentType = "application/pdf";
+        } else if (contentFile.substr(contentFile.find('.') + 1) == "png") {
+            contentType = "image/*";
         } else {
             std::cout << "File Error!\r\n";
         }
 	}
 
-    std::ifstream f (".\\front" + contentFile);
+    std::ifstream f(".\\front" + contentFile, std::ios::binary);
     if (f.good()) {
-        std::string str ((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-        content = str;   
+        content.clear();
+
+        content << f.rdbuf();
         errCode = 200;
     }
 
     f.close();
 
-    request += "GET / HTTP/1.1 "; request += errCode; request += " OK\r\n";
-    request += "Cache-Control: no-cache, private\r\n";
-    request += "Content-Disposition: inline\r\n";
-    request += "Content-Type: "; request += contentType; request += "\r\n";
-    request += "Content-Length: "; request += content.size(); request += "\r\n";
-    request += "\r\n";
-    std::cout << request;
-    request += content;
+    // std::cout << content;
 
-    toClientBroadcast(clientSock, request.c_str(), strlen(request.c_str()) + 1);
+    request << "HTTP/1.1 " << errCode << " OK\r\n";
+    request << "Cache-Control: no-cache, private\r\n";
+    request << "Content-Disposition: inline\r\n";
+    request << "Content-Type: " << contentType << "\r\n";
+    request << "Content-Length: " << content.str().size() << "\r\n";
+    request << "\r\n";
+    request << content.str();
+
+    std::cout << "\n";
+
+    toClientBroadcast(clientSock, request.str().c_str(), request.str().size() + 1);
+
+    return;
 }

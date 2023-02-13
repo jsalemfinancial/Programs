@@ -9,7 +9,5 @@ int main() {
     }
 
     webServer.start();
-
-    system("pause");
     return 0;
 }

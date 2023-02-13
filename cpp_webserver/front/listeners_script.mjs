@@ -32,6 +32,4 @@ document.getElementById("submit-button").addEventListener("click", () => {
     };
 
     fillFields(data);
-
-    console.log("Done!");
 });

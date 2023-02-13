@@ -1,24 +1,19 @@
-// import {PDFDocument} from "/pdf-lib";
-// import {writeFileSync, readFileSync} from "/fs";
-
 const {PDFDocument} = PDFLib;
 
 export async function fillFields(dataDict) {
-    const FORM_BYTES = await fetch("RD-108_MI.pdf");
-    console.log(FORM_BYTES);
+    const FORM_BYTES = await fetch("http://localhost:27015/RD-108_MI.pdf").then(file => file.arrayBuffer());
     const FORM_DOC = await PDFDocument.load(FORM_BYTES);
 
     var form = FORM_DOC.getForm();
-    console.log(form);
 
-    // var fields = form.getFields();
+    var fields = form.getFields();
 
-    // fields.forEach((field) => {
-    //   var type = field.constructor.name;
-    //   var name = field.getName();
+    fields.forEach((field) => {
+      var type = field.constructor.name;
+      var name = field.getName();
 
-    //   console.log(`${type}: ${name}`);
-    // });
+      console.log(`${type}: ${name}`);
+    });
 
     const VEHICLE_DEALER = form.getTextField("Vehicle Dealer");
     VEHICLE_DEALER.setFontSize(12);
@@ -92,6 +87,12 @@ export async function fillFields(dataDict) {
     MSRP.setFontSize(10);
     MSRP.setText(dataDict["msrp"]);
 
+    const OWNRS_LSRS = form.getTextField("Complete Names and Address of All Owners or Lessor");
+    OWNRS_LSRS.setFontSize(8);
+
+    const LESSEES = form.getTextField("Complete Names and Address of All Lessees");
+    LESSEES.setFontSize(8);
+
     // Fees and Pricing
 
     let salesTax = parseFloat(dataDict["salesTax"]);
@@ -164,6 +165,9 @@ export async function fillFields(dataDict) {
                             parseFloat(dataDict["plateFee"]) + parseFloat(dataDict["plateTransFee"]) +
                             parseFloat(dataDict["titleFee"]) + parseFloat(dataDict["titleLateFee"])).toFixed(2)).toString());
 
-    // download("../RD-108_MI.pdf", await FORM_DOC.save(), "application/pdf");
-    document.getElementsByTagName("iframe")[0].src = FORM_DOC.save();
-}
+    await FORM_DOC.saveAsBase64({dataUri: true}).then((file) => {
+            document.getElementById("pdf-file").getElementsByTagName("object")[0].setAttribute("data", file);
+        });
+
+    console.log("Done!");
+};
