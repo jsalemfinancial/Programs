@@ -29,6 +29,16 @@
         <span class="form-button">
             {{ form.submitButton }}
         </span>
+
+        <span>
+            {% for error in form.userEmail.errors %}
+                {{ error }}
+            {% endfor %}
+
+            {% for error in form.userPassword.errors %}
+                {{ error }}
+            {% endfor %}
+        </span>
     </form>
 <div>
 
