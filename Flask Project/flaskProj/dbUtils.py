@@ -14,9 +14,16 @@ class DBCommands():
             self.cursor = self.conn.cursor()
             return self.cursor
         except mysql.connector.errors.InterfaceError as error:
-            raise Exception(error)
+            raise DBErrors("Interface Error", error)
+        except mysql.connector.errors.ProgrammingError as error:
+            raise DBErrors("Programming Error", error)
 
     def __exit__(self, executeType, executeValue, executeTrace) -> None:
         self.conn.commit()
         self.cursor.close()
         self.conn.close()
+
+        if executeType is mysql.connector.errors.ProgrammingError:
+            raise DBErrors(executeType)
+        elif executeType:
+            raise executeType(executeValue)

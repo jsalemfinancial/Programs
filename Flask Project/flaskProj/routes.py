@@ -1,7 +1,7 @@
 from flask import request, render_template, redirect, url_for, flash
 from flaskProj import app, session, flaskBcrypt
 from flaskProj.loginUtils import loginPortal
-from flaskProj.dbUtils import DBCommands
+from flaskProj.dbUtils import DBCommands, DBErrors
 
 @app.route("/", methods=["GET", "POST"])
 def landing(title: str = "Joe's Web App") -> "html":
@@ -16,23 +16,27 @@ def landing(title: str = "Joe's Web App") -> "html":
 
 @app.route("/login", methods=["GET", "POST"])
 def login(title: str = "Login Portal") -> "html":
-    LoginForm = loginPortal()
+    try:
+        LoginForm = loginPortal()
 
-    if (LoginForm.validate_on_submit()):
-        passwordHash = flaskBcrypt.generate_password_hash(LoginForm.userPassword.data).decode("utf-8")
-        userEmail = LoginForm.userEmail.data
+        if (LoginForm.validate_on_submit()):
+            passwordHash = flaskBcrypt.generate_password_hash(LoginForm.userPassword.data).decode("utf-8")
+            userEmail = LoginForm.userEmail.data
 
-        with DBCommands(app.config["dbConfig"]) as cursor:
-            cursor.execute("""INSERT INTO userAccounts
-                            VALUES (%s, %s)""", (str(userEmail).lower(), passwordHash))
-            
-        flash("Submitted Successfully, " + str(userEmail).split("@")[0], "success")
+            with DBCommands(app.config["dbConfig"]) as cursor:
+                cursor.execute("""INSERT INTO userAccounts
+                                VALUES (%s, %s)""", (str(userEmail).lower(), passwordHash))
+                
+            flash("Submitted Successfully, " + str(userEmail).split("@")[0], "success")
 
-        session["logged_in"] = True
+            session["logged_in"] = True
 
-        return redirect(url_for("landing"))
+            return redirect(url_for("landing"))
 
-    return render_template("login.html", the_title = title, form=LoginForm)
+        return render_template("login.html", the_title = title, form=LoginForm)
+    except DBErrors as error:
+        print("Caught Error!", error)
+    return "Error-Page TBA"
 
 @app.route("/logout", methods=["GET", "POST"])
 @loginPortal.sessionStatus
