@@ -23,7 +23,7 @@ def login(title: str = "Login Portal") -> "html":
             passwordHash = flaskBcrypt.generate_password_hash(LoginForm.userPassword.data).decode("utf-8")
             userEmail = LoginForm.userEmail.data
 
-            with DBCommands(app.config["dbConfig"]) as cursor:
+            with DBCommands(app.config["DB_CONFIG"]) as cursor:
                 cursor.execute("""INSERT INTO userAccounts
                                 VALUES (%s, %s)""", (str(userEmail).lower(), passwordHash))
                 

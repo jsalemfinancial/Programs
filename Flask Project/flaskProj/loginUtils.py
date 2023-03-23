@@ -23,7 +23,7 @@ class loginPortal(FlaskForm):
         return wrapper
     
     def validate_userEmail(self, userEmail):
-        with DBCommands(app.config["dbConfig"]) as cursor:
+        with DBCommands(app.config["DB_CONFIG"]) as cursor:
             cursor.execute("""SELECT email
                                 FROM userAccounts
                                 WHERE email=%s""", (str(userEmail.data).lower(),)) #Extra ',' at end to tell python to unpack tuple.
