@@ -25,11 +25,11 @@ def login(title: str = "Login Portal") -> "html":
 
             with DBCommands(app.config["DB_CONFIG"]) as cursor:
                 cursor.execute("""INSERT INTO userAccounts
-                                VALUES (%s, %s)""", (str(userEmail).lower(), passwordHash))
+                                VALUES (%s, %s, %s)""", (str(userEmail).lower(), str(passwordHash), False))
                 
-            flash("Submitted Successfully, " + str(userEmail).split("@")[0], "success")
-
-            session["logged_in"] = True
+            LoginForm.sendConfirmation()
+                
+            flash("Submitted successfully, " + str(userEmail).split("@")[0] + ". Please check your email!", "success")
 
             return redirect(url_for("landing"))
 
@@ -37,6 +37,7 @@ def login(title: str = "Login Portal") -> "html":
     except DBErrors as error:
         print("Caught Error!", error)
     return "Error-Page TBA"
+
 
 @app.route("/logout", methods=["GET", "POST"])
 @loginPortal.sessionStatus
